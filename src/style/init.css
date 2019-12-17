@@ -1,0 +1,90 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+}
+
+.f_float {
+  float: left;
+}
+
+.r_float {
+  float: right;
+}
+
+/*banner*/
+.bannerBox {
+  width: 100%;
+  height: 320px;
+}
+
+.bannerBox .bannerPic {
+  display: block;
+  width: 100%;
+  height: 320px;
+}
+
+
+/*字体颜色*/
+.fontColor {
+  color: #075A52;
+}
+
+/*内容标题和时间*/
+
+.contentTitle .detailsInfoTitle {
+  font-size: 28px;
+  margin-top: 18px;
+  color: #000000;
+  opacity: 1;
+  text-align: center;
+  width: 900px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contentTitle .times {
+  font-size: 14px;
+  color: #666666;
+  opacity: 1;
+  margin-top: 12px;
+  text-align: center;
+}
+
+/*管理员登录页面*/
+.loginBox .el-input {
+  width: 90%;
+}
+
+.loginBox .el-form-item__label {
+  color: #FFFFFF;
+}
+
+
+/*修改文章弹窗*/
+.articleBox .el-dialog__footer {
+  margin-top: 100px;
+}
+
+/*修改机构弹框*/
+.organizationalBox .el-select {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+
+.organizationalBox .el-dialog__footer {
+  margin-top: 50px;
+}
+
+.ql-color.ql-picker, .ql-background.ql-picker, .ql-align.ql-picker {
+  position: relative;
+  top: -6px;
+}
+
+.organizationalBox .el-form-item__content,
+.articleBox .el-form-item__content {
+  line-height: normal;
+}

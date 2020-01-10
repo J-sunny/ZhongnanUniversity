@@ -83,22 +83,33 @@
     methods: {
       //  获取中心新闻文章列表
       getCenterNewsList() {
-        getNewsList({newsTypeId: 6}).then(data => {
-          this.centerNews = data.data
+        getNewsList({
+          newsTypeId: 6,
+          page: 1,
+          pageSize: 10
+        }).then(data => {
+          this.centerNews = data.data.records
         })
       },
       //  获取行业资讯文章列表
       getHangyeNewsList() {
-        getNewsList({newsTypeId: 5}).then(data => {
+        getNewsList({
+          newsTypeId: 5, page: 1,
+          pageSize: 10
+        }).then(data => {
           console.log(data);
-          this.hangye = data.data
+          this.hangye = data.data.records
         })
       },
       //  获取学术活动文章列表
       getShuxhuNewsList() {
-        getNewsList({newsTypeId: 9}).then(data => {
+        getNewsList({
+          newsTypeId: 9,
+          page: 1,
+          pageSize: 10
+        }).then(data => {
           console.log(data);
-          this.xueshu = data.data
+          this.xueshu = data.data.records
         })
       },
       // 跳转
@@ -109,15 +120,13 @@
         this.$store.state.createTime = createTime
         this.$store.state.classificationId = classificationId
         this.$store.addStore()
-        if (classificationId==4) {
+        if (classificationId == 4) {
           this.$store.state.classificationName = '行业动态'
           this.$store.addStore()
-        }
-        else if(classificationId==5){
+        } else if (classificationId == 5) {
           this.$store.state.classificationName = '学术活动'
           this.$store.addStore()
-        }
-        else {
+        } else {
 
         }
         console.log(newsId);

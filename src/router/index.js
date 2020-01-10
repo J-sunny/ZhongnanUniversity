@@ -53,206 +53,223 @@ import AdminIndex from '@/view/administration/index'
 import Article from '@/view/administration/article/index'
 //机构管理
 import Organizational from '@/view/administration/organizational/index'
+import listInstitutions from '@/view/administration/organizational/listInstitutions'
 
-export default new Router({
-  routes: [
-    {path: '/', redirect: '/home'},
-    {
+var routes=    [
+  {path: '/', redirect: '/home'},
+  {
+    path: '/home',
+    component: Head,
+    children: [{
       path: '/home',
-      component: Head,
-      children: [{
-        path: '/home',
-        component: Index,
-      }]
-    },
-    {
+      component: Index,
+    }]
+  },
+  {
+    path: '/centre',
+    component: Head,
+    children: [{
       path: '/centre',
-      component: Head,
-      children: [{
-        path: '/centre',
-        component: Centre,
-      }]
-    },
-    {
-      path: '/personnel',
-      component: Head,
-      children: [
-        {
-          path: '/personnel',
-          component: Personnel,
-          children: [
-            {
-              path: '',
-              redirect: 'index'
-            },
-            {
-              path: 'index',
-              component: InstitutionalSettings,
-            },
-            {
-              path: 'researcher',
-              component: Researcher,
-            },
-            {
-              path: 'personnelInfo',
-              component: PersonnelInfo,
-            }
-          ]
-        },
+      component: Centre,
+    }]
+  },
+  {
+    path: '/personnel',
+    component: Head,
+    children: [
+      {
+        path: '/personnel',
+        component: Personnel,
+        children: [
+          {
+            path: '',
+            redirect: 'index'
+          },
+          {
+            path: 'index',
+            component: InstitutionalSettings,
+          },
+          {
+            path: 'researcher',
+            component: Researcher,
+          },
+          {
+            path: 'personnelInfo',
+            component: PersonnelInfo,
+          }
+        ]
+      },
 
-      ]
-    },
-    {
-      path: '/dynamics',
-      component: Head,
-      children: [
-        {
-          path: '/dynamics',
-          component: Dynamics,
-          children: [
-            {
-              path: '',
-              redirect: 'index'
-            },
-            {
-              path: 'index',
-              component: IndustryInformation,
-            },
-            {
-              path: 'centralNews',
-              component: CentralNews,
-            },
-            {
-              path: 'caseTracking',
-              component: CaseTracking,
-            },
-            {
-              path: 'newsDetail',
-              component: NewsDetail,
-            },
-          ]
-        },
-      ]
-    },
-    {
-      path: '/researchFindings',
-      component: Head,
-      children: [
-        {
-          path: '/researchFindings',
-          component: ResearchFindings,
-          children: [
-            {
-              path: '',
-              redirect: 'index'
-            },
-            {
-              path: 'index',
-              component: AcademicPapers,
-            },
-            {
-              path: 'detailsResults',
-              component: DetailsResults,
-            },
-          ]
-        },
-      ]
-    },
-    {
-      path: '/socialServices',
-      component: Head,
-      children: [
-        {
-          path: '/socialServices',
-          component: SocialServices,
-          children: [
-            {
-              path: '',
-              redirect: 'index'
-            },
-            {
-              path: 'index',
-              component: SndustryTraining,
-            },
-            {
-              path: 'detailsServices',
-              component: DetailsServices,
-            },
-          ]
-        },
+    ]
+  },
+  {
+    path: '/dynamics',
+    component: Head,
+    children: [
+      {
+        path: '/dynamics',
+        component: Dynamics,
+        children: [
+          {
+            path: '',
+            redirect: 'index'
+          },
+          {
+            path: 'index',
+            component: IndustryInformation,
+          },
+          {
+            path: 'centralNews',
+            component: CentralNews,
+          },
+          {
+            path: 'caseTracking',
+            component: CaseTracking,
+          },
+          {
+            path: 'newsDetail',
+            component: NewsDetail,
+          },
+        ]
+      },
+    ]
+  },
+  {
+    path: '/researchFindings',
+    component: Head,
+    children: [
+      {
+        path: '/researchFindings',
+        component: ResearchFindings,
+        children: [
+          {
+            path: '',
+            redirect: 'index'
+          },
+          {
+            path: 'index',
+            component: AcademicPapers,
+          },
+          {
+            path: 'detailsResults',
+            component: DetailsResults,
+          },
+        ]
+      },
+    ]
+  },
+  {
+    path: '/socialServices',
+    component: Head,
+    children: [
+      {
+        path: '/socialServices',
+        component: SocialServices,
+        children: [
+          {
+            path: '',
+            redirect: 'index'
+          },
+          {
+            path: 'index',
+            component: SndustryTraining,
+          },
+          {
+            path: 'detailsServices',
+            component: DetailsServices,
+          },
+        ]
+      },
 
-      ]
-    },
-    {
-      path: '/academicResources',
-      component: Head,
-      children: [
-        {
-          path: '/academicResources',
-          component: AcademicResources,
-          children: [
-            {
-              path: '',
-              redirect: 'index'
-            },
-            {
-              path: 'index',
-              component: IndustryGuidelines,
-            },
-            {
-              path: 'detailsResources',
-              component: DetailsResources,
-            },
-          ]
-        },
+    ]
+  },
+  {
+    path: '/academicResources',
+    component: Head,
+    children: [
+      {
+        path: '/academicResources',
+        component: AcademicResources,
+        children: [
+          {
+            path: '',
+            redirect: 'index'
+          },
+          {
+            path: 'index',
+            component: IndustryGuidelines,
+          },
+          {
+            path: 'detailsResources',
+            component: DetailsResources,
+          },
+        ]
+      },
 
-      ]
-    },
-    {
-      path: '/lawsRegulations',
-      component: Head,
-      children: [
-        {
-          path: '/lawsRegulations',
-          component: LawsRegulations,
-          children: [
-            {
-              path: '',
-              redirect: 'index'
-            },
-            {
-              path: 'index',
-              component: Nationallaws,
-            },
-            {
-              path: 'legalDetails',
-              component: LegalDetails,
-            },
-          ]
-        },
-      ]
-    },
-    {
-      path: '/adminLogin',
-      component: AdminLogin
-    },
-    {
-      path: '/adminIndex',
-      component: AdminIndex,
-      children: [
-        {
-          path: '',
-          redirect: 'article'
-        },
-        {
-          path: 'article',
-          component: Article,
-        },
-        {
-          path: 'organizational',
-          component: Organizational,
-        }
-      ]
-    }
-  ]
+    ]
+  },
+  {
+    path: '/lawsRegulations',
+    component: Head,
+    children: [
+      {
+        path: '/lawsRegulations',
+        component: LawsRegulations,
+        children: [
+          {
+            path: '',
+            redirect: 'index'
+          },
+          {
+            path: 'index',
+            component: Nationallaws,
+          },
+          {
+            path: 'legalDetails',
+            component: LegalDetails,
+          },
+        ]
+      },
+    ]
+  },
+  {
+    path: '/adminLogin',
+    component: AdminLogin
+  },
+  {
+    path: '/adminIndex',
+    component: AdminIndex,
+    children: [
+      {
+        path: '',
+        redirect: 'article'
+      },
+      {
+        path: 'article',
+        component: Article,
+      },
+      {
+        path: 'organizational',
+        component: Organizational,
+      },
+      {
+        path: 'listInstitutions',
+        component: listInstitutions,
+      }
+    ]
+  }
+]
+
+
+
+var Routes = new Router({
+  routes:routes
 })
+const originalPush = Router.prototype.push
+Routes.afterEach((to, from) => {
+  history.pushState(null, null, window.location.href.split('#')[0]+'#'+to.path);
+})
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+export default Routes

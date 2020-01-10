@@ -32,6 +32,24 @@
       </div>
     </div>
 
+
+    <!--    分页-->
+<!--    <div class="pagination_box">-->
+<!--      <div class="pagination">-->
+<!--        <el-pagination-->
+<!--          :current-page="pages"-->
+<!--          hide-on-single-page-->
+<!--          :page-size="10"-->
+<!--          layout="prev, pager, next"-->
+<!--          @prev-click="prevClick"-->
+<!--          @next-click="nextClick"-->
+<!--          @size-change="sizeChange"-->
+<!--          @current-change="currentChange"-->
+<!--          :total="totalNews">-->
+<!--        </el-pagination>-->
+<!--      </div>-->
+<!--    </div>-->
+
   </div>
 </template>
 
@@ -45,22 +63,57 @@
       return {
         getOrganiList: [],
         UsersList: [],
-        DetailedInfo: []
+        DetailedInfo: [],
+        totalNews: 0,
+        pages: 1
       }
     },
     methods: {
+
+      //上一页
+      prevClick() {
+        if (this.pages <= 1) {
+          this.$message.warning("已是第一页")
+        } else {
+          this.pages--
+          this.getOrganizations()
+        }
+      },
+      //下一页
+      nextClick() {
+        if (this.pages >= (Math.ceil(this.totalNews / 10))) {
+          this.$message.warning("最后一页")
+        } else {
+          this.pages++
+          this.getOrganizations()
+        }
+      },
+      //改变pageSize
+      sizeChange(val) {
+        console.log(val)
+      },
+      //currentPage改变时
+      currentChange(val) {
+        this.pages = val
+        this.getOrganizations()
+      },
+
       //获取机构列表
       getOrganizations() {
-        getOrganizations().then(data => {
-          this.getOrganiList = data.data
-          // console.log(data);
-        })
+        // getOrganizations({
+        //   currentPage: this.pages,
+        //   pageSize: 1
+        // }).then(data => {
+        //   this.getOrganiList = data.data.records
+        //   this.totalNews=data.data.total
+        //   // console.log(data);
+        // })
       },
       // 获取机构人员列表
       getOrganizationUsers() {
-        getOrganizationUsers().then(data => {
-          this.UsersList = data.data
-        })
+        // getOrganizationUsers().then(data => {
+        //   this.UsersList = data.data
+        // })
       },
       //获取机构及人员信息
       getOrganizationDetailedInfo() {
@@ -147,5 +200,18 @@
   .jobInfo {
     font-weight: 400;
     color: #999999;
+  }
+
+  /*  分页*/
+  .pagination_box {
+    width: 100%;
+    margin-bottom: 100px;
+    margin-top: 30px;
+  }
+
+  .pagination {
+    /*display: inline-block;*/
+    width: 450px;
+    margin: 0 auto;
   }
 </style>

@@ -73,6 +73,24 @@
         </el-table-column>
       </el-table>
     </div>
+
+    <!--    分页-->
+    <div class="pagination_box">
+      <div class="pagination">
+        <el-pagination
+          :current-page="pages"
+          hide-on-single-page
+          :page-size="10"
+          layout="prev, pager, next"
+          @prev-click="prevClick"
+          @next-click="nextClick"
+          @size-change="sizeChange"
+          @current-change="currentChange"
+          :total="totalNews">
+        </el-pagination>
+      </div>
+    </div>
+
     <!--    添加，修改文章弹框-->
     <el-dialog
       :title="Wtitle"
@@ -110,7 +128,7 @@
       <!--  文章标题-->
       <el-form>
         <el-form-item label="文章标题" label-width="80px">
-          <el-input v-model="newsTitle" autocomplete="off"></el-input>
+          <el-input maxlength="50" v-model="newsTitle" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <el-form>
@@ -142,6 +160,7 @@
   import {saveNews, deleteNews} from "@/api/article";
   //获取文章详情
   import {getNews} from "@/api/socialServices";
+  import {parseTime} from '@/uitlis/index'
 
   export default {
     name: "index",
@@ -171,10 +190,40 @@
         ueditor: {
           value: '编辑器默认文字',
           config: {}
-        }
+        },
+        totalNews: 0,
+        pages: 1
       }
     },
     methods: {
+      //上一页
+      prevClick() {
+        if (this.pages <= 1) {
+          this.$message.warning("已是第一页")
+        } else {
+          this.pages--
+          this.getNewsList(this.newsTypeId)
+        }
+      },
+      //下一页
+      nextClick() {
+        if (this.pages >= (Math.ceil(this.totalNews / 10))) {
+          this.$message.warning("最后一页")
+        } else {
+          this.pages++
+          this.getNewsList(this.newsTypeId)
+        }
+      },
+      //改变pageSize
+      sizeChange(val) {
+        console.log(val)
+      },
+      //currentPage改变时
+      currentChange(val) {
+        this.pages = val
+        this.getNewsList(this.newsTypeId)
+      },
+
       //添加文章
       addArticle() {
         this.contentText = ""
@@ -182,7 +231,6 @@
         this.newsId = ""
         this.newsTitle = ""
         this.addNewsTypeId = ""
-
         this.dialogVisible = true
         setTimeout(() => {
           this.$refs.ue.editor.body.innerHTML = this.contentText
@@ -206,12 +254,18 @@
         if (newsTypeId == '') {
           this.navValue = ''
         }
-        getNewsList({newsTypeId: newsTypeId}).then(data => {
-          this.articleList = data.data
+        getNewsList({newsTypeId: newsTypeId, page: this.pages, pageSize: 10}).then(data => {
+          console.log(data.data.records);
+          data.data.records.forEach(item => {
+            item.createTime = parseTime(new Date(item.createTime).getTime())
+          })
+          this.articleList = data.data.records
+          this.totalNews = data.data.total
         })
       },
       //筛选文章
       screen() {
+        this.pages = 1
         this.getNewsList(this.newsTypeId)
       },
       //  修改录入文章
@@ -358,5 +412,18 @@
   .articleBox .bottomBox {
     text-align: center;
     margin-top: 50px;
+  }
+
+  /*  分页*/
+  .pagination_box {
+    width: 100%;
+    margin-bottom: 100px;
+    margin-top: 30px;
+  }
+
+  .pagination {
+    /*display: inline-block;*/
+    width: 450px;
+    margin: 0 auto;
   }
 </style>

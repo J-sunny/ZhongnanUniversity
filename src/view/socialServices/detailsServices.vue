@@ -7,7 +7,7 @@
     </div>
     <!--    内容-->
     <div class="servicesConBox">
-      <div v-html="getNewsDetails"></div>
+      <div class="UETxt" v-html="getNewsDetails"></div>
       <div v-if="false" class="servicesPic">
         <img src="../../../static/imgs/112.png" alt="">
       </div>
@@ -29,7 +29,7 @@
     <!--    微信分享弹出框-->
     <div class="wShareBox" v-if="wShow">
       <span class="el-icon-close close" @click="closeW"></span>
-      <p class="title" >分享到微信</p>
+      <p class="title">分享到微信</p>
       <div>
         <img :src="maPic" alt="">
       </div>
@@ -43,6 +43,7 @@
 
   // 获取文章详情
   import {getNews} from '@/api/socialServices'
+  import {parseTime} from '@/uitlis/index'
 
   export default {
     name: 'detailsServices',
@@ -53,15 +54,16 @@
         getNewsDetails: [],
         scrollTop: 0,
         maPic: '',
-        wShow:false
+        wShow: false
       }
     },
     methods: {
       //  获取文章详情
       getNews() {
-        // console.log(this.$store.state.createTime);
+        let createTime = this.$store.state.createTime
+        let newCreateTime = parseTime(new Date(createTime).getTime())
         getNews({
-          createTime: this.$store.state.createTime,
+          createTime: newCreateTime,
           newsId: this.newsId,
           newsTypeId: this.newsTypeId
         }).then(data => {
@@ -126,12 +128,12 @@
           this.maPic = 'http://zixuephp.net/inc/qrcode_img.php?url=' + window.location.href
           console.log(this.maPic);
           // window.open();
-          this.wShow=true
+          this.wShow = true
         }
       },
-    //  关闭微信弹框
-      closeW(){
-        this.wShow=false
+      //  关闭微信弹框
+      closeW() {
+        this.wShow = false
       }
 
     },
@@ -156,9 +158,9 @@
     width: 900px;
     font-size: 28px;
     color: #000000;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    /*white-space: nowrap;*/
     text-align: center;
   }
 
@@ -245,8 +247,8 @@
 
   }
 
-/*  微信分享弹框*/
-  .wShareBox{
+  /*  微信分享弹框*/
+  .wShareBox {
     width: 300px;
     height: 350px;
     position: fixed;
@@ -257,26 +259,33 @@
     background-color: #f1f1f1;
     z-index: 10000;
   }
-  .wShareBox .title{
+
+  .wShareBox .title {
     text-align: center;
     margin-top: 30px;
     font-size: 16px;
   }
-  .wShareBox .close{
+
+  .wShareBox .close {
     float: right;
     font-size: 24px;
     cursor: pointer;
     margin-right: 10px;
     /*margin-top: 10px;*/
   }
-  .wShareBox img{
+
+  .wShareBox img {
     display: block;
     margin: 0 auto;
     width: 200px;
     height: 200px;
   }
-  .wText{
+
+  .wText {
     text-align: center;
   }
 
+  .UETxt img {
+    width: 100% !important;
+  }
 </style>

@@ -1,14 +1,17 @@
 <template>
   <div class="organizationalBox">
-    <p class="organiTitle">机构及人员管理</p>
+    <p class="organiTitle">机构人员管理</p>
     <p class="addSome">
-      <span @click="dialogVisibleJi=true,aTitle='添加机构'">添加机构</span>
-      <span @click="dialogVisibleJi=true,aTitle='修改机构'">修改机构</span>
-      <span @click="dialogVisibleJi=true,aTitle='删除机构'">删除机构</span>
+      <!--      <span @click="dialogVisibleJi=true,aTitle='添加机构'">添加机构</span>-->
+      <!--      <span @click="dialogVisibleJi=true,aTitle='修改机构'">修改机构</span>-->
+      <!--      <span @click="dialogVisibleJi=true,aTitle='删除机构'">删除机构</span>-->
       <span @click="showDialogVisible(),Wtitle='添加人员'">添加人员</span></p>
     <div>
+      <!--      -->
+      <p class="OrganizationName" v-for="(item,index) in getOrganiList" :key="index"
+         v-if="item.organizationId==$route.query.organizationId">{{item.organizationName}}</p>
       <!--            表格-->
-      <div style="margin-bottom: 50px;overflow: hidden">
+      <div v-if="false" style="margin-bottom: 50px;overflow: hidden">
         <div class="table_heser">
           <div style='width: 180px'>机构名称</div>
           <div style="width: 180px;">职务名称</div>
@@ -39,6 +42,47 @@
           </div>
         </div>
       </div>
+
+
+      <template>
+        <el-table
+          :data="UsersList"
+          border
+          style="width: 100%">
+          <el-table-column
+            fixed
+            prop="position"
+            label="职务名称"
+            width="150">
+          </el-table-column>
+          <el-table-column
+            prop="organizationUserName"
+            label="姓名"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="jobResponsibilities"
+            label="工作职责"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="introduction"
+            label="个人简介">
+          </el-table-column>
+          <el-table-column
+            fixed="right"
+            label="操作"
+            width="140">
+            <template slot-scope="scope">
+              <el-button @click="dialogVisible=true,
+                           Wtitle='编辑机构人员信息',
+                           editInfo(scope.row)" type="text" size="small">编辑
+              </el-button>
+              <el-button @click="deleteOrganizationUser(scope.row)" type="text" size="small">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </template>
     </div>
 
     <!--    添加，修改人员弹框-->
@@ -49,27 +93,27 @@
       @closed="closedd"
       width="1000px">
       <!--    机构列表-->
-      <el-form>
-        <el-form-item label="所属机构" label-width="80px">
-          <el-select v-model="organizationId" placeholder="请选择">
-            <el-option
-              v-for="item in getOrganiList"
-              :key="item.organizationId"
-              :label="item.organizationName"
-              :value="item.organizationId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
+      <!--      <el-form>-->
+      <!--        <el-form-item label="所属机构" label-width="80px">-->
+      <!--          <el-select v-model="organizationId" placeholder="请选择">-->
+      <!--            <el-option-->
+      <!--              v-for="item in getOrganiList"-->
+      <!--              :key="item.organizationId"-->
+      <!--              :label="item.organizationName"-->
+      <!--              :value="item.organizationId">-->
+      <!--            </el-option>-->
+      <!--          </el-select>-->
+      <!--        </el-form-item>-->
+      <!--      </el-form>-->
       <!--  职务名称-->
       <el-form>
         <el-form-item label="职务名称" label-width="80px">
-          <el-input v-model="positionName" autocomplete="off"></el-input>
+          <el-input maxlength="20" v-model="positionName" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <el-form>
         <el-form-item label="姓名" label-width="80px">
-          <el-input v-model="organization_user_name" autocomplete="off"></el-input>
+          <el-input maxlength="20" v-model="organization_user_name" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <!--      头像-->
@@ -90,12 +134,12 @@
 
       <el-form>
         <el-form-item label="工作职责" label-width="80px">
-          <el-input v-model="jobResponsibilities" autocomplete="off"></el-input>
+          <el-input maxlength="100" v-model="jobResponsibilities" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <el-form>
         <el-form-item label="个人简介" label-width="80px">
-          <el-input v-model="introduction" autocomplete="off"></el-input>
+          <el-input maxlength="100" v-model="introduction" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <p style="font-size: 20px;text-align: center;margin: 40px 0">编辑个人详情</p>
@@ -109,7 +153,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false,saveOrganizationUser()">确 定</el-button>
+    <el-button type="primary" @click="saveOrganizationUser()">确 定</el-button>
   </span>
     </el-dialog>
     <!--    添加，修改机构弹框-->
@@ -135,7 +179,7 @@
       <!--  机构名称-->
       <el-form v-if="aTitle=='修改机构'||aTitle=='添加机构'">
         <el-form-item :label="aTitle=='修改机构'?'修改为':'添加机构'" label-width="80px">
-          <el-input v-model="updateOrganizationName" autocomplete="off"></el-input>
+          <el-input maxlength="20" v-model="updateOrganizationName" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -151,7 +195,13 @@
 
 <script>
   import {getOrganizations, getOrganizationUsers, getOrganizationDetailedInfo, getUserInfoHtml} from "@/api/personnel";
-  import {saveOrganizationUser, saveOrganizationInfo, deleteOrganization, uploadUserImg} from "@/api/organizational";
+  import {
+    saveOrganizationUser,
+    saveOrganizationInfo,
+    deleteOrganization,
+    uploadUserImg,
+    deleteOrganizationUser
+  } from "@/api/organizational";
   import {saveNews} from "@/api/article";
   import {getToken} from '../../../uitlis/auth'
 
@@ -211,6 +261,19 @@
       Uediter
     },
     methods: {
+      //删除人员
+      deleteOrganizationUser(row) {
+        console.log(row);
+        this.$confirm('确认删除？').then(res => {
+          console.log(res);
+          if (res == 'confirm') {
+            deleteOrganizationUser({organizationUserId: row.organizationUserId}).then(data => {
+              this.$message.success('删除成功')
+              this.getOrganizationUsers(this.$route.query.organizationId)
+            })
+          }
+        })
+      },
       //添加人员弹框
       showDialogVisible() {
         this.dialogVisible = true
@@ -233,34 +296,36 @@
       },
       //获取机构列表---修改人员信息
       getOrganizations() {
-        getOrganizations().then(data => {
-          this.getOrganiList = data.data
+        getOrganizations({
+          currentPage: 1,
+          pageSize: 9999
+        }).then(data => {
+          this.getOrganiList = data.data.records
         })
       },
       // 获取机构人员列表
-      getOrganizationUsers() {
-        getOrganizationUsers().then(data => {
+      getOrganizationUsers(belongOrganizationId) {
+        getOrganizationUsers({
+          belongOrganizationId: belongOrganizationId
+        }).then(data => {
           this.UsersList = data.data
         })
       },
       //点击编辑机构人员信息按钮让当前信息显示在弹框上
       editInfo(val) {
-        this.organizationId = val.organization_id
+        console.log(val);
+        this.organizationId = val.belongOrganizationId
         this.positionName = val.position
-        this.organization_user_name = val.organization_user_name
-        this.jobResponsibilities = val.job_responsibilities
+        this.organization_user_name = val.organizationUserName
+        this.jobResponsibilities = val.jobResponsibilities
         this.introduction = val.introduction
-        this.personalHtmlUrl = val.personal_html_url
-        this.organizationUserId = val.organization_user_id
-        this.imageUrl = this.BASE_API + val.user_img_url
+        this.personalHtmlUrl = val.personalHtmlUrl
+        this.organizationUserId = val.organizationUserId
+        this.imageUrl = this.BASE_API + val.userImgUrl
         this.getUserInfoHtml()
       },
       //编辑,添加 机构人员信息
       saveOrganizationUser(organizationUserId) {
-        if (this.organizationId == '') {
-          this.$message.warning("请选择所属机构")
-          return
-        }
         if (this.positionName == '') {
           this.$message.warning("请填写职务名称")
           return
@@ -274,6 +339,10 @@
           return
         }
         this.personalHtmlStr = this.$refs.ue.getUEContent()
+        if (this.personalHtmlStr == '') {
+          this.$message.warning("请填写个人简介")
+          return
+        }
         saveOrganizationUser({
           belongOrganizationId: this.organizationId,
           introduction: this.introduction,
@@ -284,11 +353,12 @@
           position: this.positionName,
           userImgUrl: this.userImgUrl
         }).then(data => {
+          this.dialogVisible = false
+          this.getOrganizationUsers(this.$route.query.organizationId)
+
           this.$message.success('操作成功')
           this.getOrganizationDetailedInfo()
         })
-        this.dialogVisible = false
-
       },
       //添加修改机构
       saveOrganizationInfo() {
@@ -307,6 +377,7 @@
           organizationName: this.updateOrganizationName,
           status: 0
         }).then(data => {
+
           this.getOrganizationDetailedInfo()
           this.getOrganizations()
           // this.$message.success('操作成功')
@@ -410,6 +481,8 @@
 
     },
     created() {
+      this.getOrganizationUsers(this.$route.query.organizationId)
+      this.organizationId = this.$route.query.organizationId
       if (!getToken("X-Token")) {
         this.$message.warning("登录失效，请重新登录！")
         window.location = '#/adminLogin'
@@ -432,6 +505,11 @@
     font-weight: bold;
     margin-top: 50px;
     margin-bottom: 50px;
+  }
+
+  .OrganizationName {
+    font-size: 30px;
+    margin-bottom: 30px;
   }
 
   .organizationalBox .addSome {

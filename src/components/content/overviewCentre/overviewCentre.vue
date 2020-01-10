@@ -76,6 +76,7 @@
 
 
 <script>
+  import {parseTime} from '@/uitlis/index'
 
   import {getNewsType} from '@/api/socialServices'
   //获取文章详情
@@ -123,15 +124,18 @@
       },
       //获取文章列表
       getNewsList() {
-        getNewsList({newsTypeId: this.active}).then(data => {
-          this.getNewsLists = data.data[0]
+        getNewsList({newsTypeId: this.active,page: 1,
+          pageSize: 10}).then(data => {
+          this.getNewsLists = data.data.records[0]
           // console.log(data);
-          this.getNews(data.data[0].newsTypeId, data.data[0].createTime, data.data[0].newsId)
+          this.getNews(data.data.records[0].newsTypeId, data.data.records[0].createTime, data.data.records[0].newsId)
         })
       },
       //获取文章详情
       getNews(newsTypeId, createTime, newsId) {
-        getNews({newsTypeId: newsTypeId, createTime: createTime, newsId: newsId}).then(data => {
+        let createTimes = createTime
+        let newCreateTime=parseTime(new Date(createTimes).getTime())
+        getNews({newsTypeId: newsTypeId, createTime: newCreateTime, newsId: newsId}).then(data => {
           this.content = data.data
           // console.log(data);
         })

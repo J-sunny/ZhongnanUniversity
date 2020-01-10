@@ -9,7 +9,7 @@
             </router-link>
           </p>
           <p @click="actives('j')" :class="activeName=='j'?'active':''">
-            <router-link to="/adminIndex/organizational">机构及人员管理
+            <router-link to="/adminIndex/listInstitutions">机构及人员管理
             </router-link>
           </p>
         </div>

@@ -18,15 +18,19 @@
     <div class="pagination_box">
       <div class="pagination">
         <el-pagination
+          :current-page="pages"
           hide-on-single-page
           :page-size="10"
           layout="prev, pager, next"
+          @prev-click="prevClick"
+          @next-click="nextClick"
+          @size-change="sizeChange"
+          @current-change="currentChange"
           :total="totalNews">
         </el-pagination>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -40,23 +44,56 @@
         newsList: [],
         listID: '',
         picId: this.$route.query.picId,
-        totalNews: 0
+        totalNews: 0,
+        pages: 1
       }
     },
     watch: {
       $route(to) {
         if (this.listID != to.query.listID) {
           this.listID = to.query.listID
+          this.pages = 1
           this.getList(to.query.listID)
         }
       },
     },
     methods: {
+      //上一页
+      prevClick() {
+        if (this.pages <= 1) {
+          this.$message.warning("已是第一页")
+        } else {
+          this.pages--
+          this.getList(this.listID)
+        }
+      },
+      //下一页
+      nextClick() {
+        if (this.pages >= (Math.ceil(this.totalNews / 10))) {
+          this.$message.warning("最后一页")
+        } else {
+          this.pages++
+          this.getList(this.listID)
+        }
+      },
+      //改变pageSize
+      sizeChange(val) {
+        console.log(val)
+      },
+      //currentPage改变时
+      currentChange(val) {
+        this.pages = val
+        this.getList(this.listID)
+      },
       getList(val) {
         if (val != undefined) {
-          getNewsList({newsTypeId: val}).then(data => {
-            this.newsList = data.data
-            this.totalNews = data.data.length
+          getNewsList({
+            newsTypeId: val,
+            page: this.pages,
+            pageSize: 10
+          }).then(data => {
+            this.newsList = data.data.records
+            this.totalNews = data.data.total
           })
         }
 
@@ -70,6 +107,7 @@
       }
     },
     created() {
+      this.listID = this.$route.query.listID
       this.getList(this.$route.query.listID)
     }
   }
@@ -187,15 +225,5 @@
   }
 
 
-  /*  分页*/
-  .pagination_box {
-    width: 100%;
-    margin-bottom: 100px;
-  }
 
-  .pagination {
-    /*display: inline-block;*/
-    width: 450px;
-    margin: 0 auto;
-  }
 </style>

@@ -42,8 +42,6 @@
           </div>
         </div>
       </div>
-
-
       <template>
         <el-table
           :data="UsersList"
@@ -338,9 +336,13 @@
           this.$message.warning("请填写工作职责")
           return
         }
+        if (this.introduction == '') {
+          this.$message.warning("请填写个人简介")
+          return
+        }
         this.personalHtmlStr = this.$refs.ue.getUEContent()
         if (this.personalHtmlStr == '') {
-          this.$message.warning("请填写个人简介")
+          this.$message.warning("请填写个人详情")
           return
         }
         saveOrganizationUser({
@@ -447,7 +449,6 @@
       //  Dialog 关闭动画结束时的回调
       closedd() {
         // this.$message.info("取消了操作")
-        this.organizationId = ''
         this.positionName = ''
         this.organization_user_name = ''
         this.jobResponsibilities = ''
